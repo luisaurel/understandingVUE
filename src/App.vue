@@ -1,34 +1,27 @@
 <template>
-<div id="app">
-<h1>Vue 3 — Komponenten Demo</h1>
+  <div id="app">
+    <h1>Vue 3 — Komponenten Demo</h1>
 
-<!-- Counter: zeigt Props, v-model:count, emits -->
-<Counter :start="5" v-model:count="sharedCount" />
-<p>Shared count in App: {{ sharedCount }}</p>
+    <Counter :start="5" v-model:count="sharedCount" />
+    <p>Shared count in App: {{ sharedCount }}</p>
 
-<!-- Todo-Liste: lokale State / v-model on inputs -->
-<TodoApp />
+    <TodoApp />
 
-<!-- Parent/Child: props und emits -->
-<ParentChildDemo />
+    <ParentChildDemo />
 
-<!-- Slots: default und named slots -->
-<SlotDemo>
-<template #header>
-<h2>Header via named slot</h2>
-</template>
+    <SlotDemo>
+      <template #header>
+        <h2>Header via named slot</h2>
+      </template>
+      <template #footer>
+        <small>Footer via named slot</small>
+      </template>
+    </SlotDemo>
 
-<template #footer>
-<small>Footer via named slot</small>
-</template>
-</SlotDemo>
+    <DynamicComponentDemo />
 
-<!-- Dynamische Komponenten -->
-<DynamicComponentDemo />
-
-<!-- provide / inject -->
-<ProvideInjectDemo />
-</div>
+    <ProvideInjectDemo />
+  </div>
 </template>
 
 <script setup>
@@ -43,102 +36,109 @@ import ProvideInjectDemo from './components/ProvideInjectDemo.vue'
 const sharedCount = ref(0)
 </script>
 
-<style scoped>
-header {
-  line-height: 1.5;
+<style>
+/* WICHTIG: "scoped" wurde entfernt, damit diese Stile global gelten
+  und auch die importierten Komponenten gestylt werden.
+*/
+
+/* 1. Grundlegende Styles & Farb-Variablen */
+:root {
+  --bg-color: #1a1a1a;
+  --text-color: #e0e0e0;
+  --primary-color: #42b883; /* Vue Green */
+  --border-color: #444;
+  --card-bg: #242424;
 }
 
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  line-height: 1.6;
 }
 
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
-
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
-}
-
-.welcome-item {
-  margin-top: 2rem;
+/* 2. Layout des Hauptcontainers */
+#app {
+  max-width: 900px;
+  margin: 40px auto;
+  padding: 20px;
   display: flex;
-  position: relative;
+  flex-direction: column;
+  gap: 25px; /* Abstand zwischen den Demo-Komponenten */
 }
 
-.details {
-  flex: 1;
-  margin-left: 1rem;
+/* 3. Typografie */
+h1 {
+  font-size: 2.5em;
+  text-align: center;
+  color: var(--primary-color);
+  font-weight: 600;
+  margin-bottom: 0;
 }
 
-i {
-  display: flex;
-  place-items: center;
-  place-content: center;
-  width: 32px;
-  height: 32px;
-  color: var(--color-text);
+h2 {
+  color: var(--primary-color);
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 8px;
+  margin-top: 0;
 }
 
-h3 {
-  font-size: 1.2rem;
-  font-weight: 500;
-  margin-bottom: 0.4rem;
-  color: var(--color-heading);
+/* 4. Styling für die einzelnen Demo-Komponenten */
+/* Der Selektor "> *" wählt alle direkten Kind-Elemente von #app aus. */
+#app > div, #app > section {
+  background-color: var(--card-bg);
+  padding: 25px;
+  border-radius: 12px;
+  border: 1px solid var(--border-color);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  transition: transform 0.2s ease-in-out;
 }
 
-@media (min-width: 1024px) {
-  .welcome-item {
-    margin-top: 0;
-    padding: 0.4rem 0 1rem calc(var(--section-gap) / 2);
-  }
+#app > div:hover, #app > section:hover {
+  transform: translateY(-4px);
+}
 
-  i {
-    top: calc(50% - 25px);
-    left: -26px;
-    position: absolute;
-    border: 1px solid var(--color-border);
-    background: var(--color-background);
-    border-radius: 8px;
-    width: 50px;
-    height: 50px;
-  }
+/* Spezifische Ausnahme für den "shared count" Text, damit er keine Box hat */
+#app > p {
+  text-align: center;
+  font-size: 1.2em;
+  font-weight: bold;
+  color: #aaa;
+  margin-top: -15px;
+}
 
-  .welcome-item:before {
-    content: ' ';
-    border-left: 1px solid var(--color-border);
-    position: absolute;
-    left: 0;
-    bottom: calc(50% + 25px);
-    height: calc(50% - 25px);
-  }
+/* 5. Styling für Formularelemente (wichtig für Counter, TodoApp etc.) */
+button {
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  font-size: 1em;
+  font-weight: bold;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  margin: 5px 0;
+}
 
-  .welcome-item:after {
-    content: ' ';
-    border-left: 1px solid var(--color-border);
-    position: absolute;
-    left: 0;
-    top: calc(50% + 25px);
-    height: calc(50% - 25px);
-  }
+button:hover {
+  background-color: #36a473;
+}
 
-  .welcome-item:first-of-type:before {
-    display: none;
-  }
+input[type="text"] {
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  background-color: #333;
+  color: var(--text-color);
+  font-size: 1em;
+  width: calc(100% - 22px); /* Korrektur für padding und border */
+  margin-bottom: 10px;
+}
 
-  .welcome-item:last-of-type:after {
-    display: none;
-  }
+input[type="text"]:focus {
+  outline: none;
+  border-color: var(--primary-color);
 }
 </style>
